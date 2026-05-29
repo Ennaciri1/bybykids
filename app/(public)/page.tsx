@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Truck, Banknote, RefreshCw, ShieldCheck } from 'lucide-react'
+import Image from 'next/image'
+import { Truck, Banknote, RefreshCw, ShieldCheck, CreditCard, Tag, Sparkles, Heart } from 'lucide-react'
 import { ProductCard } from '@/components/product/ProductCard'
 import { getNewArrivals, getFeaturedProducts } from '@/lib/data/db'
 import { createClient } from '@/lib/supabase/server'
@@ -12,20 +13,20 @@ export const metadata: Metadata = {
 }
 
 const CATEGORY_TILES = [
-  { slug: 'naissance',   label: 'Naissance',   sub: '0–24 mois',    bg: '#DEEEF8', accent: '#2A7BAD', emoji: '🍼' },
-  { slug: 'bebe-fille',  label: 'Bébé fille',  sub: '0–2 ans',      bg: '#FDDDE9', accent: '#B83870', emoji: '🎀' },
-  { slug: 'bebe-garcon', label: 'Bébé garçon', sub: '0–2 ans',      bg: '#CEEAF8', accent: '#1A6B9A', emoji: '🧸' },
-  { slug: 'fille',       label: 'Fille',        sub: '2–12 ans',     bg: '#FDDDE9', accent: '#C0527A', emoji: '👗' },
-  { slug: 'garcon',      label: 'Garçon',       sub: '2–12 ans',     bg: '#CEEAF8', accent: '#2A7BAD', emoji: '👕' },
-  { slug: 'pyjamas',     label: 'Pyjamas',      sub: 'Toutes tailles', bg: '#FFF3D6', accent: '#8A6000', emoji: '🌙' },
-  { slug: 'robes',       label: 'Robes',        sub: 'Fille & enfant', bg: '#FDDDE9', accent: '#B83870', emoji: '✨' },
-  { slug: 'ensembles',   label: 'Ensembles',    sub: 'Bébé & enfant',  bg: '#D4F0E4', accent: '#2A8A5A', emoji: '🎽' },
-  { slug: 'chaussures',  label: 'Chaussures',   sub: 'Tous âges',    bg: '#FFF3D6', accent: '#7A5000', emoji: '👟' },
-  { slug: 'accessoires', label: 'Accessoires',  sub: 'Bonnets, sacs…', bg: '#E8D8F8', accent: '#6A3A9A', emoji: '🎒' },
+  { slug: 'naissance',   label: 'Naissance',   sub: '0–24 mois',      bg: '#DEEEF8', accent: '#2A7BAD' },
+  { slug: 'bebe-fille',  label: 'Bébé fille',  sub: '0–2 ans',        bg: '#FDDDE9', accent: '#B83870' },
+  { slug: 'bebe-garcon', label: 'Bébé garçon', sub: '0–2 ans',        bg: '#CEEAF8', accent: '#1A6B9A' },
+  { slug: 'fille',       label: 'Fille',        sub: '2–12 ans',       bg: '#FDDDE9', accent: '#C0527A' },
+  { slug: 'garcon',      label: 'Garçon',       sub: '2–12 ans',       bg: '#CEEAF8', accent: '#2A7BAD' },
+  { slug: 'pyjamas',     label: 'Pyjamas',      sub: 'Toutes tailles', bg: '#FFF3D6', accent: '#8A6000' },
+  { slug: 'robes',       label: 'Robes',        sub: 'Fille & enfant', bg: '#FDDDE9', accent: '#B83870' },
+  { slug: 'ensembles',   label: 'Ensembles',    sub: 'Bébé & enfant',  bg: '#D4F0E4', accent: '#2A8A5A' },
+  { slug: 'chaussures',  label: 'Chaussures',   sub: 'Tous âges',      bg: '#FFF3D6', accent: '#7A5000' },
+  { slug: 'accessoires', label: 'Accessoires',  sub: 'Bonnets, sacs…', bg: '#E8D8F8', accent: '#6A3A9A' },
 ]
 
 const TRUST_ITEMS = [
-  { Icon: Truck,       label: 'Livraison partout au Maroc', sub: '2 à 4 jours ouvrés',      bg: '#DEEEF8', color: '#2A7BAD' },
+  { Icon: Truck,       label: 'Livraison partout au Maroc', sub: '2 à 4 jours ouvrés',       bg: '#DEEEF8', color: '#2A7BAD' },
   { Icon: Banknote,    label: 'Paiement à la livraison',    sub: 'Vous payez à la réception', bg: '#FDDDE9', color: '#B83870' },
   { Icon: RefreshCw,   label: 'Échange sous 7 jours',       sub: 'Retour facile garanti',     bg: '#D4F0E4', color: '#2A8A5A' },
   { Icon: ShieldCheck, label: 'Qualité garantie',           sub: 'Matières douces & sûres',   bg: '#FFF3D6', color: '#8A6000' },
@@ -53,10 +54,7 @@ export default async function HomePage() {
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
-        {/* Fond dégradé bleu→rose très doux */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#EAF5FC] via-[#F8F0F8] to-[#FEF0F6]" />
-
-        {/* Cercles décoratifs */}
         <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-[#6BAED6]/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 left-10 w-48 h-48 rounded-full bg-[#EF8DB2]/10 blur-3xl pointer-events-none" />
 
@@ -66,9 +64,7 @@ export default async function HomePage() {
           <div className="flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 xl:px-20 py-14 lg:h-full">
             {hero.badge && (
               <div className="inline-flex items-center gap-2 mb-5 self-start bg-white/80 rounded-full px-4 py-1.5 shadow-sm border border-[#EF8DB2]/30">
-                <span className="text-[12px] font-bold text-[#EF8DB2] tracking-wide">
-                  {hero.badge}
-                </span>
+                <span className="text-[12px] font-bold text-[#EF8DB2] tracking-wide">{hero.badge}</span>
               </div>
             )}
 
@@ -90,10 +86,10 @@ export default async function HomePage() {
             {/* Mini trust pills */}
             <div className="flex flex-wrap gap-2 mb-8">
               <span className="inline-flex items-center gap-1.5 bg-[#DEEEF8] text-[#2A7BAD] text-xs font-bold px-3 py-1.5 rounded-full">
-                💳 Paiement à la livraison
+                <CreditCard size={11} /> Paiement à la livraison
               </span>
               <span className="inline-flex items-center gap-1.5 bg-[#FDDDE9] text-[#B83870] text-xs font-bold px-3 py-1.5 rounded-full">
-                🚚 Livraison Maroc
+                <Truck size={11} /> Livraison Maroc
               </span>
             </div>
 
@@ -108,7 +104,7 @@ export default async function HomePage() {
                 href="/promotions"
                 className="inline-flex items-center gap-2 bg-[#EF8DB2] text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-2xl hover:bg-[#C9608A] transition-all hover:shadow-lg hover:-translate-y-0.5 shadow-md shadow-[#EF8DB2]/30"
               >
-                🏷️ Promotions
+                <Tag size={15} /> Promotions
               </Link>
             </div>
           </div>
@@ -134,26 +130,68 @@ export default async function HomePage() {
                 </div>
               </>
             ) : (
-              <div className="absolute inset-0 grid grid-rows-2 gap-1 p-2">
-                <Link href="/shop?category=naissance"
-                  className="bg-gradient-to-br from-[#CEEAF8] to-[#DEEEF8] rounded-2xl flex flex-col items-center justify-center text-center px-6 hover:from-[#B8DFF5] hover:to-[#CEEAF8] transition-all hover:shadow-md group">
-                  <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">🍼</span>
-                  <span className="text-lg md:text-xl font-extrabold text-[#2A7BAD]">Bébé &amp; Naissance</span>
-                  <span className="text-xs text-[#2A7BAD]/70 mt-0.5">0 – 24 mois</span>
+              <div className="absolute inset-0 grid grid-rows-[3fr_2fr] gap-1 p-2">
+                {/* Card principale */}
+                <Link href="/shop" className="relative rounded-2xl overflow-hidden group block">
+                  <Image
+                    src="https://images.unsplash.com/photo-1522771930-78848d9293e8?w=800&q=80&auto=format&fit=crop"
+                    alt="Nouvelle collection enfant"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
+                    <div>
+                      <p className="text-white text-base md:text-lg font-extrabold drop-shadow">Nouvelle collection</p>
+                      <p className="text-white/70 text-xs mt-0.5">Bébé &amp; Enfant</p>
+                    </div>
+                    <span className="shrink-0 bg-white text-[#1C1C1E] text-xs font-bold px-3 py-1.5 rounded-xl">
+                      Voir tout →
+                    </span>
+                  </div>
                 </Link>
-                <Link href="/shop?category=fille"
-                  className="bg-gradient-to-br from-[#FDDDE9] to-[#FEE8F0] rounded-2xl flex flex-col items-center justify-center text-center px-6 hover:from-[#F9C8DA] hover:to-[#FDDDE9] transition-all hover:shadow-md group">
-                  <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">👗</span>
-                  <span className="text-lg md:text-xl font-extrabold text-[#C0527A]">Fille &amp; Garçon</span>
-                  <span className="text-xs text-[#C0527A]/70 mt-0.5">2 – 12 ans</span>
-                </Link>
+
+                {/* 2 petites cartes */}
+                <div className="grid grid-cols-2 gap-1">
+                  <Link href="/shop?category=naissance" className="relative rounded-2xl overflow-hidden group block">
+                    <Image
+                      src="https://images.unsplash.com/photo-1503944583220-6ad77d8adea8?w=400&q=80&auto=format&fit=crop"
+                      alt="Bébé et Naissance"
+                      fill
+                      priority
+                      sizes="300px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">Bébé &amp; Naissance</p>
+                      <p className="text-white/70 text-[10px]">0 – 24 mois</p>
+                    </div>
+                  </Link>
+                  <Link href="/shop?category=fille" className="relative rounded-2xl overflow-hidden group block">
+                    <Image
+                      src="https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400&q=80&auto=format&fit=crop"
+                      alt="Fille et Garçon"
+                      fill
+                      priority
+                      sizes="300px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">Fille &amp; Garçon</p>
+                      <p className="text-white/70 text-[10px]">2 – 12 ans</p>
+                    </div>
+                  </Link>
+                </div>
               </div>
             )}
           </div>
 
         </div>
 
-        {/* Ligne dégradée bas */}
         <div className="relative h-1.5 w-full bg-gradient-to-r from-[#6BAED6] via-[#EF8DB2] to-[#6DBF9E]" />
       </section>
 
@@ -198,8 +236,8 @@ export default async function HomePage() {
                   <span className="w-4 h-1.5 bg-[#6BAED6]/40 rounded-full" />
                 </div>
                 <div>
-                  <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-[#1C1C1E]">
-                    ✨ Nouveaux arrivages
+                  <h2 className="flex items-center gap-2 text-xl md:text-2xl lg:text-3xl font-extrabold text-[#1C1C1E]">
+                    <Sparkles size={22} className="text-[#6BAED6]" /> Nouveaux arrivages
                   </h2>
                   <p className="text-xs md:text-sm text-[#A8A8A8] mt-0.5">Les dernières pièces ajoutées</p>
                 </div>
@@ -245,7 +283,7 @@ export default async function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-5 text-white">
             <div>
               <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-3 py-1 text-xs font-bold mb-3">
-                🏷️ Offres spéciales
+                <Tag size={11} /> Offres spéciales
               </div>
               <p className="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight">
                 Jusqu&apos;à <span className="text-yellow-300">-30%</span> sur une sélection
@@ -273,8 +311,8 @@ export default async function HomePage() {
                   <span className="w-4 h-1.5 bg-[#EF8DB2]/40 rounded-full" />
                 </div>
                 <div>
-                  <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-[#1C1C1E]">
-                    💛 Meilleures ventes
+                  <h2 className="flex items-center gap-2 text-xl md:text-2xl lg:text-3xl font-extrabold text-[#1C1C1E]">
+                    <Heart size={22} className="fill-[#EF8DB2] text-[#EF8DB2]" /> Meilleures ventes
                   </h2>
                   <p className="text-xs md:text-sm text-[#A8A8A8] mt-0.5">Les pièces les plus appréciées</p>
                 </div>

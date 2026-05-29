@@ -8,6 +8,13 @@ import { useCartStore } from '@/lib/store/cart'
 import { cn } from '@/lib/utils'
 import type { Product, ProductVariant } from '@/lib/types'
 
+const COLOR_MAP: Record<string, string> = {
+  Rose: '#FFC0CB', Rouge: '#DC2626', Bleu: '#3B82F6', Vert: '#22C55E',
+  Blanc: '#F9FAFB', Noir: '#111827', Gris: '#9CA3AF', Beige: '#D4B896',
+  Jaune: '#FBBF24', Orange: '#FB923C', Violet: '#A855F7', Marine: '#1E3A5F',
+  Turquoise: '#14B8A6', Marron: '#92400E', Camel: '#C9923A', Corail: '#FF6B6B',
+}
+
 const SIZE_ORDER = [
   'Naissance', 'NB',
   '0-3 mois', '0-3M',
@@ -115,20 +122,26 @@ export function AddToCartSection({ product, variants }: Props) {
                 Aucune couleur disponible pour cette taille
               </p>
             ) : (
-              colorsForSize.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  className={cn(
-                    'px-3.5 py-1.5 text-sm font-semibold rounded-lg border transition-colors',
-                    selectedColor === color
-                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
-                      : 'bg-white text-[#1A1A1A] border-[#E8E8E8] hover:border-[#1A1A1A]'
-                  )}
-                >
-                  {color}
-                </button>
-              ))
+              colorsForSize.map((color) => {
+                const hex = COLOR_MAP[color] ?? '#E8E8E8'
+                const isWhite = color === 'Blanc'
+                return (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    aria-label={color}
+                    title={color}
+                    className={cn(
+                      'w-8 h-8 rounded-full transition-all duration-150 flex items-center justify-center',
+                      isWhite ? 'border-2 border-[#E8E8E8]' : '',
+                      selectedColor === color
+                        ? 'ring-2 ring-offset-2 ring-[#6BAED6] scale-110'
+                        : 'hover:scale-105'
+                    )}
+                    style={{ backgroundColor: hex }}
+                  />
+                )
+              })
             )}
           </div>
         </div>

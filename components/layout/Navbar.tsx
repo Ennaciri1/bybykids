@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { ShoppingBag, Search, Menu, X } from 'lucide-react'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useCartStore, selectItemCount } from '@/lib/store/cart'
 import { cn } from '@/lib/utils'
 
@@ -29,8 +29,12 @@ const DRAWER_LINKS: NavLink[] = [
 function NavbarInner() {
   const pathname     = usePathname()
   const searchParams = useSearchParams()
-  const [open, setOpen]         = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const router   = useRouter()
+  const [open, setOpen]               = useState(false)
+  const [scrolled, setScrolled]       = useState(false)
+  const [searchOpen, setSearchOpen]   = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const itemCount = useCartStore(selectItemCount)
 
   const currentHref = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
@@ -41,7 +45,26 @@ function NavbarInner() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => { setOpen(false) }, [pathname, searchParams])
+  useEffect(() => { setOpen(false); setSearchOpen(false) }, [pathname, searchParams])
+
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus()
+  }, [searchOpen])
+
+  useEffect(() => {
+    if (!searchOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setSearchOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [searchOpen])
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const q = searchQuery.trim()
+    if (q) router.push(`/shop?q=${encodeURIComponent(q)}`)
+    setSearchOpen(false)
+    setSearchQuery('')
+  }
 
   const isActive = (href: string) => currentHref === href
 
@@ -97,13 +120,13 @@ function NavbarInner() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 shrink-0">
-            <Link
-              href="/shop"
+            <button
+              onClick={() => setSearchOpen(true)}
               className="p-2 text-[#6B6B6B] hover:text-[#1A1A1A] transition-colors"
               aria-label="Rechercher"
             >
               <Search size={20} />
-            </Link>
+            </button>
 
             <Link
               href="/cart"
@@ -148,6 +171,30 @@ function NavbarInner() {
             ))}
           </div>
         </div>
+
+        {/* Search overlay */}
+        {searchOpen && (
+          <div className="absolute inset-x-0 top-0 h-16 md:h-[68px] z-60 bg-white border-b border-[#E8E8E8] shadow-md flex items-center px-4 gap-3">
+            <Search size={18} className="text-[#A8A8A8] shrink-0" />
+            <form onSubmit={handleSearchSubmit} className="flex-1">
+              <input
+                ref={searchInputRef}
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Rechercher un produit…"
+                className="w-full text-sm text-[#1A1A1A] placeholder:text-[#A8A8A8] bg-transparent outline-none"
+              />
+            </form>
+            <button
+              onClick={() => { setSearchOpen(false); setSearchQuery('') }}
+              className="p-1.5 text-[#6B6B6B] hover:text-[#1A1A1A] transition-colors shrink-0"
+              aria-label="Fermer la recherche"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        )}
 
         {/* Mobile drawer */}
         {open && (
