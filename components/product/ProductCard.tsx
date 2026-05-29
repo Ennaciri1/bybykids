@@ -14,9 +14,11 @@ type Props = { product: Product; priority?: boolean }
 
 export function ProductCard({ product, priority = false }: Props) {
   const image = product.images?.[0] || '/placeholder.jpg'
-  const hasDiscount = product.old_price && product.old_price > product.price
+  const price = Number(product.price)
+  const oldPrice = Number(product.old_price)
+  const hasDiscount = product.old_price != null && isFinite(oldPrice) && oldPrice > price
   const discount = hasDiscount
-    ? Math.round(((product.old_price! - product.price) / product.old_price!) * 100)
+    ? Math.round(((oldPrice - price) / oldPrice) * 100)
     : 0
 
   const variants = product.product_variants ?? []
@@ -72,11 +74,11 @@ export function ProductCard({ product, priority = false }: Props) {
         {/* Prix */}
         <div className="flex items-center gap-2">
           <span className="text-base md:text-[17px] font-extrabold text-[#EF8DB2]">
-            {formatPrice(product.price)}
+            {formatPrice(price)}
           </span>
           {hasDiscount && (
             <span className="text-xs md:text-sm text-[#B0B0B0] line-through">
-              {formatPrice(product.old_price!)}
+              {formatPrice(oldPrice)}
             </span>
           )}
           {hasDiscount && (

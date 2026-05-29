@@ -5,13 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrice(amount: number): string {
+export function formatPrice(amount: number | string | null | undefined): string {
+  const n = Number(amount)
+  if (!isFinite(n)) return '— MAD'
   return new Intl.NumberFormat('fr-MA', {
     style: 'currency',
     currency: 'MAD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  }).format(amount)
+  }).format(n)
 }
 
 export function generateOrderNumber(): string {
