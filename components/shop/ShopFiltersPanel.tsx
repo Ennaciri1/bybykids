@@ -6,6 +6,7 @@ import { SlidersHorizontal, X, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CategoryIcon } from '@/components/ui/CategoryIcon'
 import type { Category } from '@/lib/types'
+import { useT } from '@/lib/i18n/context'
 
 type Props = {
   categories: Category[]
@@ -21,6 +22,7 @@ const SIZE_ORDER = [
 ]
 
 export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: Props) {
+  const { t } = useT()
   const router   = useRouter()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
@@ -97,7 +99,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
 
       {/* Categories */}
       <div className="border-b border-[#F0F0F0] pb-3">
-        <SectionHeader label="Catégorie" sectionKey="category" />
+        <SectionHeader label={t.shop.category} sectionKey="category" />
         {sections.category && (
           <div className="space-y-0.5">
             <button
@@ -109,7 +111,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
                   : 'text-[#6B6B6B] hover:bg-[#F5F5F5] hover:text-[#1A1A1A]'
               )}
             >
-              Toutes les catégories
+              {t.shop.all}
             </button>
             {categories.map((cat) => (
               <button
@@ -133,7 +135,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
       {/* Sizes */}
       {sortedSizes.length > 0 && (
         <div className="border-b border-[#F0F0F0] pb-3">
-          <SectionHeader label="Taille" sectionKey="size" />
+          <SectionHeader label={t.shop.size} sectionKey="size" />
           {sections.size && (
             <div className="flex flex-wrap gap-1.5">
               {sortedSizes.map((size) => (
@@ -158,7 +160,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
       {/* Colors */}
       {colors.length > 0 && (
         <div className="border-b border-[#F0F0F0] pb-3">
-          <SectionHeader label="Couleur" sectionKey="color" />
+          <SectionHeader label={t.shop.color} sectionKey="color" />
           {sections.color && (
             <div className="flex flex-wrap gap-1.5">
               {colors.map((color) => (
@@ -182,7 +184,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
 
       {/* Price */}
       <div className="border-b border-[#F0F0F0] pb-3">
-        <SectionHeader label="Prix (MAD)" sectionKey="price" />
+        <SectionHeader label={`${t.shop.price} (MAD)`} sectionKey="price" />
         {sections.price && (
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -229,7 +231,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
           onClick={clearAll}
           className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-[#6BAED6] bg-[#EAF5FC] hover:bg-[#FFE8DC] rounded-lg border border-[#A8D4ED] transition-colors mt-2"
         >
-          <X size={12} /> Effacer les filtres
+          <X size={12} /> {t.shop.clearAll}
         </button>
       )}
     </div>
@@ -244,7 +246,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
           className="flex items-center gap-2 text-sm font-bold text-[#1A1A1A] bg-white border border-[#E8E8E8] rounded-lg px-4 py-2.5 hover:border-[#6BAED6] transition-colors"
         >
           <SlidersHorizontal size={16} className="text-[#6BAED6]" />
-          Filtres
+          {t.shop.filters}
           {hasFilters && (
             <span className="bg-[#6BAED6] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-black leading-none">
               !
@@ -257,7 +259,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
             <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
             <div className="relative ml-auto w-80 bg-white h-full overflow-y-auto shadow-xl">
               <div className="sticky top-0 bg-white border-b border-[#E8E8E8] px-5 py-4 flex items-center justify-between">
-                <h2 className="font-extrabold text-[#1A1A1A]">Filtres</h2>
+                <h2 className="font-extrabold text-[#1A1A1A]">{t.shop.filters}</h2>
                 <button
                   onClick={() => setOpen(false)}
                   className="p-1.5 hover:bg-[#F5F5F5] rounded-lg transition-colors"
@@ -275,7 +277,7 @@ export function ShopFiltersPanel({ categories, sizes, colors, currentParams }: P
       <div className="hidden lg:block w-56 shrink-0">
         <div className="bg-white rounded-xl border border-[#E8E8E8] overflow-hidden">
           <div className="bg-[#FAFAF7] border-b border-[#E8E8E8] px-4 py-3">
-            <h2 className="font-extrabold text-[13px] text-[#1A1A1A] uppercase tracking-wide">Filtres</h2>
+            <h2 className="font-extrabold text-[13px] text-[#1A1A1A] uppercase tracking-wide">{t.shop.filters}</h2>
           </div>
           <div className="p-4">{filtersContent}</div>
         </div>

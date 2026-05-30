@@ -10,6 +10,7 @@ import { checkoutSchema, type CheckoutSchema } from '@/lib/validations/checkout'
 import { formatPrice, MOROCCAN_CITIES } from '@/lib/utils'
 import { validatePromoCode, placeOrder, getDeliveryFee } from '@/lib/actions'
 import { Tag, X, Check, Loader2, Truck } from 'lucide-react'
+import { useT } from '@/lib/i18n/context'
 
 type AppliedPromo = {
   id: string
@@ -19,6 +20,7 @@ type AppliedPromo = {
 }
 
 export default function CheckoutPage() {
+  const { t } = useT()
   const router = useRouter()
   const { items, clearCart } = useCartStore()
   const sub = useCartStore(selectSubtotal)
@@ -113,31 +115,31 @@ export default function CheckoutPage() {
 
             <div className="space-y-5">
               <h2 className="text-sm font-bold text-[#1A1A1A] border-b border-[#E8E8E8] pb-3">
-                Informations de livraison
+                {t.checkout.deliveryInfo}
               </h2>
 
               <div>
                 <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-                  Nom complet *
+                  {t.checkout.fullName} {t.checkout.required}
                 </label>
-                <input {...register('fullName')} placeholder="Prénom et nom" className={field(!!errors.fullName)} />
+                <input {...register('fullName')} placeholder={t.checkout.fullNamePlaceholder} className={field(!!errors.fullName)} />
                 {errors.fullName && <p className="text-red-500 text-xs mt-1.5">{errors.fullName.message}</p>}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-                  Téléphone *
+                  {t.checkout.phone} {t.checkout.required}
                 </label>
-                <input {...register('phone')} type="tel" placeholder="06 XX XX XX XX" className={field(!!errors.phone)} />
+                <input {...register('phone')} type="tel" placeholder={t.checkout.phonePlaceholder} className={field(!!errors.phone)} />
                 {errors.phone && <p className="text-red-500 text-xs mt-1.5">{errors.phone.message}</p>}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-                  Ville *
+                  {t.checkout.city} {t.checkout.required}
                 </label>
                 <select {...register('city')} className={field(!!errors.city)}>
-                  <option value="">Sélectionnez votre ville</option>
+                  <option value="">{t.checkout.cityPlaceholder}</option>
                   {MOROCCAN_CITIES.map((city) => (
                     <option key={city} value={city}>{city}</option>
                   ))}
@@ -147,26 +149,25 @@ export default function CheckoutPage() {
 
               <div>
                 <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-                  Adresse complète *
+                  {t.checkout.address} {t.checkout.required}
                 </label>
-                <textarea {...register('address')} rows={3} placeholder="Numéro, rue, quartier..." className={`${field(!!errors.address)} resize-none`} />
+                <textarea {...register('address')} rows={3} placeholder={t.checkout.addressPlaceholder} className={`${field(!!errors.address)} resize-none`} />
                 {errors.address && <p className="text-red-500 text-xs mt-1.5">{errors.address.message}</p>}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-                  Notes pour le livreur <span className="normal-case font-normal text-[#A8A8A8] ml-1">(optionnel)</span>
+                  {t.checkout.notes} <span className="normal-case font-normal text-[#A8A8A8] ml-1">{t.checkout.notesOptional}</span>
                 </label>
-                <textarea {...register('notes')} rows={2} placeholder="Instructions particulières..." className={`${field(false)} resize-none`} />
+                <textarea {...register('notes')} rows={2} placeholder={t.checkout.notesPlaceholder} className={`${field(false)} resize-none`} />
               </div>
             </div>
 
             {/* COD notice */}
             <div className="border border-[#B4D4C0] bg-[#EEF6F1] rounded-lg p-4">
-              <p className="text-sm font-bold text-[#2F6A40] mb-1">Paiement à la livraison</p>
+              <p className="text-sm font-bold text-[#2F6A40] mb-1">{t.checkout.codTitle}</p>
               <p className="text-xs text-[#3A8A50] leading-relaxed">
-                Vous payez uniquement quand vous recevez votre commande.
-                On vous appelle pour confirmer avant expédition.
+                {t.checkout.codDesc}
               </p>
             </div>
 
@@ -182,9 +183,9 @@ export default function CheckoutPage() {
               className="w-full bg-[#6BAED6] text-white text-sm font-bold py-3.5 rounded-lg hover:bg-[#4A8FBA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
-                <><Loader2 size={16} className="animate-spin" />Envoi en cours...</>
+                <><Loader2 size={16} className="animate-spin" />{t.checkout.sending}</>
               ) : (
-                'Confirmer la commande'
+                t.checkout.confirm
               )}
             </button>
           </form>
@@ -194,7 +195,7 @@ export default function CheckoutPage() {
         <div>
           <div className="bg-white border border-[#E8E8E8] rounded-xl p-5 sticky top-20">
             <h2 className="text-sm font-bold text-[#1A1A1A] mb-4 pb-3 border-b border-[#E8E8E8]">
-              Votre commande
+              {t.checkout.orderSummary}
             </h2>
 
             {/* Items */}
@@ -226,7 +227,7 @@ export default function CheckoutPage() {
                     <Check size={14} className="text-green-600 shrink-0" />
                     <div>
                       <p className="text-xs font-bold text-green-800 font-mono tracking-wide">{applied.code}</p>
-                      <p className="text-[10px] text-green-600">{applied.label} appliqué</p>
+                      <p className="text-[10px] text-green-600">{applied.label} {t.checkout.appliedLabel}</p>
                     </div>
                   </div>
                   <button onClick={removePromo} className="text-green-400 hover:text-green-700 transition-colors">
@@ -237,14 +238,14 @@ export default function CheckoutPage() {
                 <div>
                   <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
                     <Tag size={11} />
-                    Code promo
+                    {t.checkout.promoCode}
                   </label>
                   <div className="flex gap-2">
                     <input
                       value={promoInput}
                       onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(null) }}
                       onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleApplyPromo())}
-                      placeholder="Entrez votre code"
+                      placeholder={t.checkout.promoPlaceholder}
                       className="flex-1 border border-[#E8E8E8] rounded-lg px-3 py-2 text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-[#6BAED6]/20 focus:border-[#6BAED6]"
                     />
                     <button
@@ -253,7 +254,7 @@ export default function CheckoutPage() {
                       disabled={promoLoading || !promoInput.trim()}
                       className="shrink-0 bg-[#1A1A1A] text-white text-xs font-bold px-4 rounded-lg hover:bg-[#333] transition-colors disabled:opacity-40"
                     >
-                      {promoLoading ? <Loader2 size={13} className="animate-spin" /> : 'Appliquer'}
+                      {promoLoading ? <Loader2 size={13} className="animate-spin" /> : t.checkout.apply}
                     </button>
                   </div>
                   {promoError && <p className="text-red-500 text-xs mt-1.5">{promoError}</p>}
@@ -264,27 +265,27 @@ export default function CheckoutPage() {
             {/* Totals */}
             <div className="border-t border-[#E8E8E8] pt-4 space-y-2 text-sm">
               <div className="flex justify-between text-[#6B6B6B]">
-                <span>Sous-total</span>
+                <span>{t.checkout.subtotal}</span>
                 <span>{formatPrice(sub)}</span>
               </div>
               <div className="flex justify-between text-[#6B6B6B]">
-                <span className="flex items-center gap-1"><Truck size={12} /> Livraison</span>
+                <span className="flex items-center gap-1"><Truck size={12} /> {t.checkout.shipping}</span>
                 {deliveryFee === null ? (
                   <span className="w-10 h-3.5 bg-[#F5F5F5] rounded animate-pulse inline-block" />
                 ) : deliveryFee === 0 ? (
-                  <span className="text-[#2F6A40] font-bold text-xs">Gratuite</span>
+                  <span className="text-[#2F6A40] font-bold text-xs">{t.checkout.freeShipping}</span>
                 ) : (
                   <span>{formatPrice(deliveryFee)}</span>
                 )}
               </div>
               {applied && (
                 <div className="flex justify-between text-green-600 font-semibold">
-                  <span>Réduction ({applied.code})</span>
+                  <span>{t.checkout.discount} ({applied.code})</span>
                   <span>-{formatPrice(applied.discount)}</span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-[#1A1A1A] text-base pt-2 border-t border-[#E8E8E8]">
-                <span>Total</span>
+                <span>{t.checkout.total}</span>
                 <span>{formatPrice(total)}</span>
               </div>
             </div>

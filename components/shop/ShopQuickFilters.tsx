@@ -6,6 +6,7 @@ import { Percent } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CategoryIcon } from '@/components/ui/CategoryIcon'
 import type { Category } from '@/lib/types'
+import { useT } from '@/lib/i18n/context'
 
 type Props = {
   categories: Category[]
@@ -13,6 +14,7 @@ type Props = {
 }
 
 export function ShopQuickFilters({ categories, currentCategory }: Props) {
+  const { t } = useT()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -34,7 +36,7 @@ export function ShopQuickFilters({ categories, currentCategory }: Props) {
         className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold border-2 border-[#EF8DB2] text-[#EF8DB2] bg-[#FEF0F6] hover:bg-[#EF8DB2] hover:text-white transition-colors shrink-0"
       >
         <Percent size={13} />
-        Promotions
+        {t.shop.promotions}
       </Link>
 
       {/* Séparateur */}
@@ -50,7 +52,7 @@ export function ShopQuickFilters({ categories, currentCategory }: Props) {
             : 'bg-white text-[#6B6B6B] border-[#EBEBEB] hover:border-[#1C1C1E] hover:text-[#1C1C1E]'
         )}
       >
-        Tout
+        {t.shop.all}
       </Link>
 
       {/* Pills catégories */}

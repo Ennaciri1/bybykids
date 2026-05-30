@@ -7,8 +7,10 @@ import { Trash2, ShoppingBag, ChevronRight, Truck, Banknote } from 'lucide-react
 import { useCartStore, selectSubtotal } from '@/lib/store/cart'
 import { formatPrice } from '@/lib/utils'
 import { getDeliveryFee } from '@/lib/actions'
+import { useT } from '@/lib/i18n/context'
 
 export default function CartPage() {
+  const { t } = useT()
   const { items, removeItem, updateQuantity } = useCartStore()
   const sub = useCartStore(selectSubtotal)
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null)
@@ -26,15 +28,15 @@ export default function CartPage() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#EAF5FC] mb-5">
             <ShoppingBag size={36} className="text-[#6BAED6]" />
           </div>
-          <h1 className="text-2xl font-extrabold text-[#1A1A1A] mb-2">Votre panier est vide</h1>
+          <h1 className="text-2xl font-extrabold text-[#1A1A1A] mb-2">{t.cart.empty}</h1>
           <p className="text-sm text-[#6B6B6B] mb-8 leading-relaxed">
-            Découvrez notre sélection et ajoutez vos pièces préférées pour vos enfants.
+            {t.cart.emptyDesc}
           </p>
           <Link
             href="/shop"
             className="inline-flex items-center gap-2 bg-[#6BAED6] text-white text-sm font-bold px-8 py-3.5 rounded-xl hover:bg-[#4A8FBA] transition-colors shadow-sm shadow-[#6BAED6]/30"
           >
-            Voir la boutique <ChevronRight size={16} />
+            {t.cart.browsShop} <ChevronRight size={16} />
           </Link>
         </div>
       </div>
@@ -46,10 +48,10 @@ export default function CartPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 md:py-12">
 
         <h1 className="text-2xl md:text-[28px] font-extrabold text-[#1A1A1A] mb-2">
-          Mon panier
+          {t.cart.title}
         </h1>
         <p className="text-sm text-[#A8A8A8] mb-8">
-          {items.length} article{items.length > 1 ? 's' : ''} dans votre panier
+          {t.cart.itemCount(items.length)}
         </p>
 
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-10">
@@ -106,7 +108,7 @@ export default function CartPage() {
                       <button
                         onClick={() => removeItem(item.variantId)}
                         className="w-7 h-7 flex items-center justify-center text-[#C8C8C8] hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
-                        aria-label="Supprimer"
+                        aria-label={t.cart.remove}
                       >
                         <Trash2 size={14} />
                       </button>
@@ -120,7 +122,7 @@ export default function CartPage() {
               href="/shop"
               className="block text-center text-xs text-[#6BAED6] font-semibold hover:text-[#4A8FBA] transition-colors mt-2 py-2"
             >
-              ← Continuer mes achats
+              {t.cart.continueShopping}
             </Link>
           </div>
 
@@ -128,29 +130,29 @@ export default function CartPage() {
           <div className="lg:col-span-1">
             <div className="bg-white border border-[#EBEBEB] rounded-2xl p-5 sticky top-20">
               <h2 className="text-sm font-extrabold text-[#1A1A1A] mb-4 pb-3 border-b border-[#F5F5F5]">
-                Récapitulatif
+                {t.cart.summary}
               </h2>
 
               <div className="space-y-2.5 text-sm mb-5">
                 <div className="flex justify-between text-[#6B6B6B]">
-                  <span>Sous-total ({items.length} art.)</span>
+                  <span>{t.cart.subtotal} ({t.cart.items(items.length)})</span>
                   <span>{formatPrice(sub)}</span>
                 </div>
                 <div className="flex justify-between text-[#6B6B6B]">
                   <span className="flex items-center gap-1.5">
                     <Truck size={13} className="text-[#6BAED6]" />
-                    Livraison
+                    {t.cart.shipping}
                   </span>
                   {deliveryFee === null ? (
                     <span className="w-12 h-4 bg-[#F5F5F5] rounded animate-pulse" />
                   ) : deliveryFee === 0 ? (
-                    <span className="text-[#2F6A40] font-bold">Gratuite</span>
+                    <span className="text-[#2F6A40] font-bold">{t.cart.freeShipping}</span>
                   ) : (
                     <span>{formatPrice(deliveryFee)}</span>
                   )}
                 </div>
                 <div className="pt-3 border-t border-[#F5F5F5] flex justify-between font-extrabold text-[#1A1A1A] text-base">
-                  <span>Total</span>
+                  <span>{t.cart.total}</span>
                   <span className="text-[#6BAED6]">
                     {deliveryFee === null ? '…' : formatPrice(total)}
                   </span>
@@ -161,13 +163,13 @@ export default function CartPage() {
                 href="/checkout"
                 className="block w-full text-center bg-gradient-to-r from-[#6BAED6] to-[#5A9EC6] text-white text-sm font-bold py-3.5 rounded-xl hover:from-[#5A9EC6] hover:to-[#4A8FBA] transition-all shadow-sm shadow-[#6BAED6]/30"
               >
-                Commander maintenant →
+                {t.cart.checkout}
               </Link>
 
               <div className="mt-4 flex items-center justify-center gap-1.5 bg-[#EEF6F1] rounded-xl py-2.5 px-3">
                 <Banknote size={14} className="text-[#2F6A40] shrink-0" />
                 <p className="text-xs text-[#2F6A40] font-semibold">
-                  Paiement uniquement à la livraison
+                  {t.cart.codNotice}
                 </p>
               </div>
             </div>

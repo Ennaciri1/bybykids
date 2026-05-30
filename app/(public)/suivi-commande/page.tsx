@@ -6,6 +6,7 @@ import { formatPrice } from '@/lib/utils'
 import { ORDER_STATUS_LABELS, ORDER_STATUS_COLORS } from '@/lib/utils'
 import { Search, Package, Truck, CheckCircle, Clock, XCircle, PhoneCall } from 'lucide-react'
 import Link from 'next/link'
+import { useT } from '@/lib/i18n/context'
 
 type OrderResult = {
   order_number: string
@@ -30,6 +31,7 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
 }
 
 export default function SuiviCommandePage() {
+  const { t } = useT()
   const [orderNumber, setOrderNumber] = useState('')
   const [phone, setPhone]             = useState('')
   const [loading, setLoading]         = useState(false)
@@ -51,7 +53,7 @@ export default function SuiviCommandePage() {
 
     const result = data?.[0] ?? null
     if (!result) {
-      setError('Commande introuvable. Vérifiez le numéro de commande et le téléphone.')
+      setError(t.suivi.notFound)
     } else {
       setOrder(result)
     }
@@ -68,31 +70,31 @@ export default function SuiviCommandePage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#EAF5FC] mb-4">
             <Package size={26} className="text-[#6BAED6]" />
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A] mb-2">Suivre ma commande</h1>
-          <p className="text-[#6B6B6B] text-sm">Entrez votre numéro de commande et votre téléphone pour voir le statut.</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A] mb-2">{t.suivi.title}</h1>
+          <p className="text-[#6B6B6B] text-sm">{t.suivi.subtitle}</p>
         </div>
 
         {/* Search form */}
         <form onSubmit={handleSearch} className="bg-white rounded-2xl border border-[#E8E8E8] p-6 mb-6 space-y-4">
           <div>
             <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-              Numéro de commande
+              {t.suivi.orderNumber}
             </label>
             <input
               value={orderNumber}
               onChange={(e) => setOrderNumber(e.target.value.toUpperCase())}
-              placeholder="ex: CMD-XXXXXXXX"
+              placeholder={t.suivi.orderNumberPlaceholder}
               className="w-full border border-[#E8E8E8] rounded-lg px-4 py-3 text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-[#6BAED6]/20 focus:border-[#6BAED6]"
             />
           </div>
           <div>
             <label className="block text-xs font-bold text-[#6B6B6B] uppercase tracking-wide mb-1.5">
-              Numéro de téléphone
+              {t.suivi.phone}
             </label>
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="06 XX XX XX XX"
+              placeholder={t.suivi.phonePlaceholder}
               type="tel"
               className="w-full border border-[#E8E8E8] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6BAED6]/20 focus:border-[#6BAED6]"
             />
@@ -107,7 +109,7 @@ export default function SuiviCommandePage() {
             ) : (
               <Search size={16} />
             )}
-            Rechercher ma commande
+            {t.suivi.search}
           </button>
 
           {error && (
@@ -175,13 +177,13 @@ export default function SuiviCommandePage() {
             {/* Totals */}
             <div className="border-t border-[#E8E8E8] pt-4 space-y-1.5 text-sm">
               <div className="flex justify-between text-[#6B6B6B]">
-                <span>Sous-total</span><span>{formatPrice(order.subtotal)}</span>
+                <span>{t.suivi.subtotal}</span><span>{formatPrice(order.subtotal)}</span>
               </div>
               <div className="flex justify-between text-[#6B6B6B]">
-                <span>Livraison</span><span>{formatPrice(order.delivery_fee)}</span>
+                <span>{t.suivi.delivery}</span><span>{formatPrice(order.delivery_fee)}</span>
               </div>
               <div className="flex justify-between font-bold text-[#1A1A1A] pt-1.5 border-t border-[#E8E8E8]">
-                <span>Total</span><span>{formatPrice(order.total)}</span>
+                <span>{t.suivi.total}</span><span>{formatPrice(order.total)}</span>
               </div>
             </div>
 

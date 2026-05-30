@@ -4,6 +4,7 @@ import { ShopQuickFilters } from '@/components/shop/ShopQuickFilters'
 import { filterProducts, getAllCategories, getAllVariantOptions } from '@/lib/data/db'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
+import { getT } from '@/lib/i18n/server'
 
 export const metadata: Metadata = {
   title: 'Boutique — Byby Kids',
@@ -17,6 +18,7 @@ type SearchParams = {
 }
 
 export default async function ShopPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const { t } = await getT()
   const params = await searchParams
 
   const [products, categories, { sizes, colors }] = await Promise.all([
@@ -35,13 +37,13 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
       <div className="bg-white border-b border-[#EBEBEB] py-5 md:py-7">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs md:text-sm text-[#A8A8A8] mb-1.5">
-            <a href="/" className="hover:text-[#1C1C1E] transition-colors">Accueil</a>
+            <a href="/" className="hover:text-[#1C1C1E] transition-colors">{t.shop.home}</a>
             <span>/</span>
             <span className="text-[#6B6B6B]">{title}</span>
           </div>
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#1C1C1E]">{title}</h1>
           <p className="text-xs md:text-sm text-[#A8A8A8] mt-1">
-            {products.length} produit{products.length !== 1 ? 's' : ''}
+            {t.shop.products(products.length)}
           </p>
         </div>
       </div>
@@ -65,8 +67,8 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
             {products.length === 0 ? (
               <div className="text-center py-20 bg-white rounded-xl border border-[#EBEBEB]">
-                <p className="text-base font-bold text-[#1C1C1E] mb-2">Aucun produit trouvé</p>
-                <p className="text-sm text-[#A8A8A8]">Essayez de modifier vos filtres.</p>
+                <p className="text-base font-bold text-[#1C1C1E] mb-2">{t.shop.noProducts}</p>
+                <p className="text-sm text-[#A8A8A8]">{t.shop.noProductsDesc}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">

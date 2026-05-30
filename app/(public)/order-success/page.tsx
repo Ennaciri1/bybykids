@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { CheckCircle, Package, Phone, Truck, Clock, ShoppingBag } from 'lucide-react'
+import { getT } from '@/lib/i18n/server'
 
 type Props = { searchParams: Promise<{ ref?: string; name?: string }> }
 
 export default async function OrderSuccessPage({ searchParams }: Props) {
+  const { t } = await getT()
   const { ref, name } = await searchParams
   const decodedName = name ? decodeURIComponent(name) : null
 
@@ -21,15 +23,15 @@ export default async function OrderSuccessPage({ searchParams }: Props) {
           </div>
 
           <h1 className="text-2xl md:text-[28px] font-extrabold text-[#1A1A1A] mb-3">
-            Merci pour votre commande !
+            {t.orderSuccess.title}
           </h1>
           <p className="text-[#6B6B6B] text-sm leading-relaxed max-w-sm mx-auto">
             {decodedName ? (
               <>Bonjour <strong className="text-[#1A1A1A]">{decodedName}</strong>, votre commande a bien été reçue.</>
             ) : (
-              'Votre commande a bien été reçue.'
+              t.orderSuccess.desc
             )}
-            {' '}Notre équipe vous rappellera dans les plus brefs délais pour confirmer et organiser la livraison.
+            {' '}{t.orderSuccess.teamDesc}
           </p>
         </div>
 
@@ -39,9 +41,9 @@ export default async function OrderSuccessPage({ searchParams }: Props) {
             <Phone size={20} className="text-[#6BAED6]" />
           </div>
           <div>
-            <p className="font-extrabold text-[#1A1A1A] text-sm mb-1">On vous rappelle très bientôt !</p>
+            <p className="font-extrabold text-[#1A1A1A] text-sm mb-1">{t.orderSuccess.callSoon}</p>
             <p className="text-xs text-[#6B6B6B] leading-relaxed">
-              Vous recevrez un appel de notre équipe pour confirmer votre commande avant l'expédition.
+              {t.orderSuccess.callDesc}
             </p>
           </div>
         </div>
@@ -51,31 +53,31 @@ export default async function OrderSuccessPage({ searchParams }: Props) {
           <div className="bg-white rounded-2xl border border-[#EBEBEB] p-5 mb-5">
             <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#F5F5F5]">
               <Package size={16} className="text-[#6BAED6]" />
-              <span className="font-extrabold text-[#1A1A1A] text-sm">Détails de la commande</span>
+              <span className="font-extrabold text-[#1A1A1A] text-sm">{t.orderSuccess.orderDetails}</span>
             </div>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center">
-                <span className="text-[#A8A8A8]">Numéro de référence</span>
+                <span className="text-[#A8A8A8]">{t.orderSuccess.ref}</span>
                 <span className="font-mono font-extrabold text-[#6BAED6] bg-[#EAF5FC] px-2.5 py-1 rounded-lg text-xs">
                   {ref}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#A8A8A8]">Statut</span>
+                <span className="text-[#A8A8A8]">{t.orderSuccess.status}</span>
                 <span className="flex items-center gap-1.5 text-amber-700 font-bold text-xs bg-amber-50 px-2.5 py-1 rounded-lg">
-                  <Clock size={11} /> En attente de confirmation
+                  <Clock size={11} /> {t.orderSuccess.pending}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#A8A8A8]">Paiement</span>
+                <span className="text-[#A8A8A8]">{t.orderSuccess.payment}</span>
                 <span className="font-semibold text-[#2F6A40] text-xs bg-[#EEF6F1] px-2.5 py-1 rounded-lg">
-                  À la livraison
+                  {t.orderSuccess.codPayment}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#A8A8A8]">Délai de livraison</span>
+                <span className="text-[#A8A8A8]">{t.orderSuccess.deliveryTime}</span>
                 <span className="flex items-center gap-1.5 text-[#2A7BAD] font-bold text-xs">
-                  <Truck size={11} /> 2 – 4 jours ouvrables
+                  <Truck size={11} /> {t.orderSuccess.deliveryDays}
                 </span>
               </div>
             </div>
@@ -108,7 +110,7 @@ export default async function OrderSuccessPage({ searchParams }: Props) {
             className="flex-1 bg-gradient-to-r from-[#6BAED6] to-[#5A9EC6] text-white font-bold py-3.5 rounded-xl text-sm hover:from-[#5A9EC6] hover:to-[#4A8FBA] transition-all text-center flex items-center justify-center gap-2 shadow-sm shadow-[#6BAED6]/25"
           >
             <ShoppingBag size={15} />
-            Continuer les achats
+            {t.orderSuccess.backToShop}
           </Link>
         </div>
 
