@@ -9,6 +9,7 @@ import { ReviewForm } from '@/components/product/ReviewForm'
 import { ReviewsList } from '@/components/product/ReviewsList'
 import { formatPrice } from '@/lib/utils'
 import { Star } from 'lucide-react'
+import { getT } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -32,6 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params
+  const { t, locale } = await getT()
   const product = await getProductBySlug(slug)
   if (!product) notFound()
 
@@ -56,9 +58,9 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 flex-wrap text-xs text-[#A8A8A8] mb-6">
-          <Link href="/" className="hover:text-[#1A1A1A] transition-colors">Accueil</Link>
+          <Link href="/" className="hover:text-[#1A1A1A] transition-colors">{t.common.home}</Link>
           <span>/</span>
-          <Link href="/shop" className="hover:text-[#1A1A1A] transition-colors">Boutique</Link>
+          <Link href="/shop" className="hover:text-[#1A1A1A] transition-colors">{t.shop.allShop}</Link>
           {product.categories && (
             <>
               <span>/</span>
@@ -116,7 +118,7 @@ export default async function ProductPage({ params }: Props) {
             )}
 
             <h1 className="text-2xl md:text-3xl lg:text-[34px] font-extrabold text-[#1A1A1A] mb-3 leading-tight">
-              {product.name}
+              {locale === 'ar' && (product as any).name_ar ? (product as any).name_ar : product.name}
             </h1>
 
             {/* Note moyenne */}
@@ -129,7 +131,7 @@ export default async function ProductPage({ params }: Props) {
                   ))}
                 </div>
                 <span className="text-sm font-bold text-[#1C1C1E]">{Math.round(avgRating * 10) / 10}</span>
-                <span className="text-xs text-[#A8A8A8]">({reviews.length} avis)</span>
+                <span className="text-xs text-[#A8A8A8]">({t.product.reviewsCount(reviews.length)})</span>
               </div>
             )}
 
@@ -149,17 +151,17 @@ export default async function ProductPage({ params }: Props) {
               {totalStock > 10 ? (
                 <span className="inline-flex items-center gap-1.5 bg-[#EEF6F1] border border-[#B4D4C0] text-[#2F6A40] rounded-full px-3 py-1.5 text-xs font-bold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#3A8A50]" />
-                  En stock
+                  {t.product.stockHigh}
                 </span>
               ) : totalStock > 0 ? (
                 <span className="inline-flex items-center gap-1.5 bg-[#FFF8E1] border border-[#E5D080] text-[#8A6000] rounded-full px-3 py-1.5 text-xs font-bold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C4960A]" />
-                  Plus que {totalStock} disponible{totalStock > 1 ? 's' : ''}
+                  {t.product.stockLow(totalStock)}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5 bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] rounded-full px-3 py-1.5 text-xs font-bold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444]" />
-                  Rupture de stock
+                  {t.product.outOfStock}
                 </span>
               )}
             </div>
@@ -168,9 +170,11 @@ export default async function ProductPage({ params }: Props) {
 
             {product.description && (
               <div className="mt-7 pt-6 border-t border-[#E8E8E8]">
-                <h2 className="text-sm font-bold text-[#1A1A1A] mb-2">Description</h2>
+                <h2 className="text-sm font-bold text-[#1A1A1A] mb-2">{t.product.description}</h2>
                 <p className="text-sm text-[#6B6B6B] leading-relaxed whitespace-pre-line">
-                  {product.description}
+                  {locale === 'ar' && (product as any).description_ar
+                    ? (product as any).description_ar
+                    : product.description}
                 </p>
               </div>
             )}
@@ -178,9 +182,9 @@ export default async function ProductPage({ params }: Props) {
             {/* Trust badges */}
             <div className="mt-6 grid grid-cols-3 gap-2">
               {[
-                { label: 'Livraison',  sub: '2–4 jours',        bg: '#EEF6FB', border: '#BDD9EA', color: '#1A6B8A' },
-                { label: 'Paiement',  sub: 'À la livraison',   bg: '#EEF6F1', border: '#B4D4C0', color: '#2F6A40' },
-                { label: 'Retour',    sub: 'Sous 7 jours',     bg: '#EAF5FC', border: '#A8D4ED', color: '#CC4A20' },
+                { label: t.product.trustDelivery,  sub: t.product.trustDeliverySub, bg: '#EEF6FB', border: '#BDD9EA', color: '#1A6B8A' },
+                { label: t.product.trustPayment,   sub: t.product.trustPaymentSub,  bg: '#EEF6F1', border: '#B4D4C0', color: '#2F6A40' },
+                { label: t.product.trustReturn,    sub: t.product.trustReturnSub,   bg: '#EAF5FC', border: '#A8D4ED', color: '#CC4A20' },
               ].map((p) => (
                 <div
                   key={p.label}
@@ -200,17 +204,17 @@ export default async function ProductPage({ params }: Props) {
           <div className="flex items-center gap-3 mb-6">
             <span className="w-1 h-6 bg-[#F5C333] rounded-full" />
             <h2 className="text-lg md:text-xl font-extrabold text-[#1C1C1E]">
-              Avis clients
+              {t.product.reviewsTitle}
             </h2>
             {reviews.length > 0 && (
               <span className="bg-[#FFF9E6] text-[#9A7200] text-xs font-bold px-2.5 py-1 rounded-full border border-[#F5C333]/30">
-                {reviews.length} avis
+                {t.product.reviewsCount(reviews.length)}
               </span>
             )}
           </div>
 
           <div className="grid md:grid-cols-[1fr_360px] gap-8">
-            <ReviewsList reviews={reviews} />
+            <ReviewsList reviews={reviews} locale={locale} />
             <div>
               <ReviewForm productId={product.id} />
             </div>
@@ -222,7 +226,7 @@ export default async function ProductPage({ params }: Props) {
           <section className="mt-14 md:mt-16">
             <div className="flex items-center gap-3 mb-5">
               <span className="w-1 h-5 bg-[#6BAED6] rounded-full" />
-              <h2 className="text-base font-extrabold text-[#1A1A1A]">Vous aimerez aussi</h2>
+              <h2 className="text-base font-extrabold text-[#1A1A1A]">{t.product.relatedTitle}</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
               {related.map((p) => <ProductCard key={p.id} product={p} />)}

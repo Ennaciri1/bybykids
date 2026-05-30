@@ -22,10 +22,12 @@ const variantSchema = z.object({
 
 const productSchema = z.object({
   name: z.string().min(2, 'Nom requis'),
+  name_ar: z.string().optional(),
   category_id: z.string().optional(),
   price: z.preprocess((v) => parseFloat(String(v)), z.number().positive('Prix requis')),
   old_price: z.preprocess((v) => (v === '' || v == null ? null : parseFloat(String(v))), z.number().nullable().optional()),
   description: z.string().optional(),
+  description_ar: z.string().optional(),
   is_featured: z.boolean(),
   is_active: z.boolean(),
   variants: z.array(variantSchema).min(1, 'Au moins un variant est requis'),
@@ -51,10 +53,12 @@ export function ProductForm({ product, categories }: Props) {
     resolver: zodResolver(productSchema) as any,
     defaultValues: {
       name: product?.name ?? '',
+      name_ar: (product as any)?.name_ar ?? '',
       category_id: product?.category_id ?? '',
       price: product?.price ?? 0,
       old_price: product?.old_price ?? undefined,
       description: product?.description ?? '',
+      description_ar: (product as any)?.description_ar ?? '',
       is_featured: product?.is_featured ?? false,
       is_active: product?.is_active ?? true,
       variants: product?.product_variants?.length
@@ -109,15 +113,17 @@ export function ProductForm({ product, categories }: Props) {
     try {
       if (product) {
         // Update product
-        const { error: productError } = await supabase
+        const { error: productError } = await (supabase as any)
           .from('products')
           .update({
             name: data.name,
+            name_ar: data.name_ar || null,
             slug,
             category_id: data.category_id || null,
             price: data.price,
             old_price: data.old_price || null,
             description: data.description || null,
+            description_ar: data.description_ar || null,
             images,
             is_featured: data.is_featured,
             is_active: data.is_active,
@@ -139,15 +145,17 @@ export function ProductForm({ product, categories }: Props) {
         )
       } else {
         // Create product
-        const { data: newProduct, error: productError } = await supabase
+        const { data: newProduct, error: productError } = await (supabase as any)
           .from('products')
           .insert({
             name: data.name,
+            name_ar: data.name_ar || null,
             slug,
             category_id: data.category_id || null,
             price: data.price,
             old_price: data.old_price || null,
             description: data.description || null,
+            description_ar: data.description_ar || null,
             images,
             is_featured: data.is_featured,
             is_active: data.is_active,
@@ -199,15 +207,27 @@ export function ProductForm({ product, categories }: Props) {
             {errors.name && <p className="text-red-600 text-xs mt-1">{errors.name.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Catégorie</label>
-            <select
-              {...register('category_id')}
-              className="w-full border border-neutral-300 rounded-lg px-4 py-3 text-sm text-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-900"
-            >
-              <option value="">Sans catégorie</option>
-              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
+              الاسم بالعربية <span className="text-neutral-400 font-normal">(اختياري)</span>
+            </label>
+            <input
+              {...register('name_ar')}
+              dir="rtl"
+              className="w-full border border-neutral-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
+              placeholder="مثال: فستان زهري صيفي"
+            />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-1">Catégorie</label>
+          <select
+            {...register('category_id')}
+            className="w-full border border-neutral-300 rounded-lg px-4 py-3 text-sm text-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-900"
+          >
+            <option value="">Sans catégorie</option>
+            {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
         </div>
 
         <div className="grid md:grid-cols-2 gap-5">
@@ -236,14 +256,28 @@ export function ProductForm({ product, categories }: Props) {
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
-          <textarea
-            {...register('description')}
-            rows={4}
-            className="w-full border border-neutral-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 resize-none"
-            placeholder="Description du produit..."
-          />
+        <div className="grid md:grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
+            <textarea
+              {...register('description')}
+              rows={4}
+              className="w-full border border-neutral-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 resize-none"
+              placeholder="Description du produit..."
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
+              الوصف بالعربية <span className="text-neutral-400 font-normal">(اختياري)</span>
+            </label>
+            <textarea
+              {...register('description_ar')}
+              dir="rtl"
+              rows={4}
+              className="w-full border border-neutral-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 resize-none"
+              placeholder="وصف المنتج بالعربية..."
+            />
+          </div>
         </div>
 
         <div className="flex gap-6">
