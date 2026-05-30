@@ -13,15 +13,10 @@ export const metadata: Metadata = {
 }
 
 const CATEGORY_TILES = [
-  { slug: 'naissance',   label: 'Naissance',   sub: '0–24 mois',      bg: '#DEEEF8', accent: '#2A7BAD' },
-  { slug: 'bebe-fille',  label: 'Bébé fille',  sub: '0–2 ans',        bg: '#FDDDE9', accent: '#B83870' },
-  { slug: 'bebe-garcon', label: 'Bébé garçon', sub: '0–2 ans',        bg: '#CEEAF8', accent: '#1A6B9A' },
   { slug: 'fille',       label: 'Fille',        sub: '2–12 ans',       bg: '#FDDDE9', accent: '#C0527A' },
   { slug: 'garcon',      label: 'Garçon',       sub: '2–12 ans',       bg: '#CEEAF8', accent: '#2A7BAD' },
   { slug: 'pyjamas',     label: 'Pyjamas',      sub: 'Toutes tailles', bg: '#FFF3D6', accent: '#8A6000' },
-  { slug: 'robes',       label: 'Robes',        sub: 'Fille & enfant', bg: '#FDDDE9', accent: '#B83870' },
   { slug: 'ensembles',   label: 'Ensembles',    sub: 'Bébé & enfant',  bg: '#D4F0E4', accent: '#2A8A5A' },
-  { slug: 'chaussures',  label: 'Chaussures',   sub: 'Tous âges',      bg: '#FFF3D6', accent: '#7A5000' },
   { slug: 'accessoires', label: 'Accessoires',  sub: 'Bonnets, sacs…', bg: '#E8D8F8', accent: '#6A3A9A' },
 ]
 
@@ -155,10 +150,10 @@ export default async function HomePage() {
 
                 {/* 2 petites cartes */}
                 <div className="grid grid-cols-2 gap-1">
-                  <Link href="/shop?category=naissance" className="relative rounded-2xl overflow-hidden group block">
+                  <Link href="/shop?category=garcon" className="relative rounded-2xl overflow-hidden group block">
                     <Image
                       src="https://images.unsplash.com/photo-1503944583220-6ad77d8adea8?w=400&q=80&auto=format&fit=crop"
-                      alt="Bébé et Naissance"
+                      alt="Garçon"
                       fill
                       priority
                       sizes="300px"
@@ -166,8 +161,8 @@ export default async function HomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">Bébé &amp; Naissance</p>
-                      <p className="text-white/70 text-[10px]">0 – 24 mois</p>
+                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">Garçon</p>
+                      <p className="text-white/70 text-[10px]">2 – 12 ans</p>
                     </div>
                   </Link>
                   <Link href="/shop?category=fille" className="relative rounded-2xl overflow-hidden group block">

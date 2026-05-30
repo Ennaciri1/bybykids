@@ -89,10 +89,11 @@ export async function Footer() {
               <ul className="space-y-2.5">
                 {[
                   ['/shop', 'Toute la boutique'],
-                  ['/shop?category=bebe', 'Bébé 0–2 ans'],
-                  ['/shop?category=fille', 'Fille 2–12 ans'],
-                  ['/shop?category=garcon', 'Garçon 2–12 ans'],
+                  ['/shop?category=fille', 'Fille'],
+                  ['/shop?category=garcon', 'Garçon'],
                   ['/shop?category=pyjamas', 'Pyjamas'],
+                  ['/shop?category=ensembles', 'Ensembles'],
+                  ['/shop?category=accessoires', 'Accessoires'],
                   ['/shop?featured=true', 'Nouveautés'],
                 ].map(([href, label]) => (
                   <li key={href}>

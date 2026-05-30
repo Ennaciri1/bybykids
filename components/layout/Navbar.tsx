@@ -11,11 +11,10 @@ import { cn } from '@/lib/utils'
 type NavLink = { href: string; label: string; promo?: boolean }
 
 const SHOP_LINKS: NavLink[] = [
-  { href: '/shop?category=naissance',   label: 'Naissance' },
-  { href: '/shop?category=bebe-fille',  label: 'Bébé fille' },
-  { href: '/shop?category=bebe-garcon', label: 'Bébé garçon' },
   { href: '/shop?category=fille',       label: 'Fille' },
   { href: '/shop?category=garcon',      label: 'Garçon' },
+  { href: '/shop?category=pyjamas',     label: 'Pyjamas' },
+  { href: '/shop?category=ensembles',   label: 'Ensembles' },
   { href: '/shop?category=accessoires', label: 'Accessoires' },
   { href: '/promotions',                 label: 'Promotions', promo: true },
 ]
