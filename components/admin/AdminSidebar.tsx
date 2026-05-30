@@ -43,7 +43,7 @@ export function AdminSidebar() {
       <div className="px-4 py-4 border-b border-neutral-200 flex items-center gap-3">
         <Link href="/" target="_blank">
           <NextImage
-            src="/bybykids_logo_no_background.png"
+            src="/bybykids_one_baby_logo_transparent.png"
             alt="BybyKids"
             width={44}
             height={44}

@@ -40,7 +40,7 @@ export async function Footer() {
             <div className="col-span-2 md:col-span-1">
               <div className="mb-3">
                 <Image
-                  src="/bybykids_logo_no_background.png"
+                  src="/bybykids_one_baby_logo_transparent.png"
                   alt="BybyKids"
                   width={130}
                   height={52}

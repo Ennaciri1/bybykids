@@ -2,8 +2,25 @@ type Props = { slug: string; size?: number }
 
 export function CategoryIcon({ slug, size = 32 }: Props) {
   const s = { width: size, height: size, viewBox: '0 0 48 48', xmlns: 'http://www.w3.org/2000/svg' }
+  const normalized = slug.toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[éèê]/g, 'e').replace(/à/g, 'a').replace(/ç/g, 'c')
 
-  switch (slug) {
+  const ALIASES: Record<string, string> = {
+    'bebe-fille': 'bebe-fille', 'bebe fille': 'bebe-fille', 'bebefille': 'bebe-fille', 'bebe-girl': 'bebe-fille',
+    'bebe-garcon': 'bebe-garcon', 'bebe garcon': 'bebe-garcon', 'bebegarcon': 'bebe-garcon', 'bebe-boy': 'bebe-garcon',
+    'bebe': 'naissance', 'nouveau-ne': 'naissance', 'newborn': 'naissance',
+    'robe': 'robes', 'dress': 'robes',
+    'ensemble': 'ensembles', 'set': 'ensembles', 'tenue': 'ensembles',
+    'chaussure': 'chaussures', 'shoes': 'chaussures', 'shoe': 'chaussures',
+    'accessoire': 'accessoires', 'acc': 'accessoires',
+    'pyjama': 'pyjamas', 'sleepwear': 'pyjamas',
+    'boys': 'garcon', 'boy': 'garcon',
+    'girls': 'fille', 'girl': 'fille',
+  }
+  const key = ALIASES[normalized] ?? normalized
+
+  switch (key) {
 
     case 'naissance':
       return (

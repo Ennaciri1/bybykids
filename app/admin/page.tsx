@@ -16,7 +16,7 @@ async function getDashboardData() {
   ] = await Promise.all([
     supabase.from('orders').select('*', { count: 'exact', head: true }),
     supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'new'),
-    supabase.from('orders').select('total, status').order('created_at', { ascending: false }),
+    supabase.from('orders').select('id, total, status').order('created_at', { ascending: false }),
     supabase
       .from('product_variants')
       .select('*, products(name, slug)')
@@ -81,7 +81,7 @@ export default async function AdminDashboardPage() {
             ) : (
               <div className="space-y-3">
                 {recentOrders.map((order: any) => (
-                  <div key={order.total} className="flex items-center justify-between text-sm">
+                  <div key={order.id} className="flex items-center justify-between text-sm">
                     <span className="text-neutral-700">{formatPrice(order.total)}</span>
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ORDER_STATUS_COLORS[order.status] ?? 'bg-neutral-100 text-neutral-700'}`}>
                       {ORDER_STATUS_LABELS[order.status] ?? order.status}

@@ -87,7 +87,7 @@ function NavbarInner() {
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0" prefetch={false}>
             <Image
-              src="/bybykids_logo_no_background.png"
+              src="/bybykids_one_baby_logo_transparent.png"
               alt="BybyKids"
               width={140}
               height={56}
