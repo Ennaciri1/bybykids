@@ -197,12 +197,12 @@ export default async function HomePage() {
             <span className="text-xl font-extrabold text-[#1C1C1E]">Nos catégories</span>
             <span className="h-px flex-1 bg-gradient-to-r from-[#EBEBEB] to-transparent" />
           </div>
-          <div className="grid grid-cols-5 sm:grid-cols-5 lg:grid-cols-10 gap-2 md:gap-3">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {CATEGORY_TILES.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/shop?category=${cat.slug}`}
-                className="group flex flex-col items-center rounded-2xl py-4 px-2 text-center transition-all duration-200 hover:scale-[1.06] hover:shadow-lg border-2 border-transparent hover:border-white"
+                className="group flex flex-col items-center rounded-2xl py-4 px-3 text-center transition-all duration-200 hover:scale-[1.06] hover:shadow-lg border-2 border-transparent hover:border-white w-[100px] sm:w-[120px] md:w-[140px]"
                 style={{ backgroundColor: cat.bg }}
               >
                 <div className="mb-1.5 group-hover:scale-110 transition-transform duration-200">
