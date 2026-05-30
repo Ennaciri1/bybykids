@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { Check, Sparkles } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/lib/store/cart'
+import { useT } from '@/lib/i18n/context'
 import type { Product } from '@/lib/types'
 
 const SIZE_ORDER = [
@@ -22,6 +23,7 @@ type Props = { product: Product; priority?: boolean }
 export function ProductCard({ product, priority = false }: Props) {
   const [addedSize, setAddedSize] = useState<string | null>(null)
   const addItem = useCartStore((s) => s.addItem)
+  const { t } = useT()
 
   const image = product.images?.[0] || '/placeholder.jpg'
   const price = Number(product.price)
@@ -80,7 +82,7 @@ export function ProductCard({ product, priority = false }: Props) {
           )}
           {product.is_featured && !hasDiscount && (
             <span className="flex items-center gap-1 bg-[#6BAED6] text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm">
-              Nouveau <Sparkles size={9} />
+              {t.product.isNew} <Sparkles size={9} />
             </span>
           )}
         </div>
@@ -88,7 +90,7 @@ export function ProductCard({ product, priority = false }: Props) {
         {/* Desktop quick-add overlay — slides up on hover */}
         {sizes.length > 0 && (
           <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-200 bg-black/65 backdrop-blur-sm px-2.5 py-2 hidden md:block">
-            <p className="text-white/70 text-[10px] font-semibold mb-1.5 uppercase tracking-wide">Ajout rapide</p>
+            <p className="text-white/70 text-[10px] font-semibold mb-1.5 uppercase tracking-wide">{t.product.quickAdd}</p>
             <div className="flex flex-wrap gap-1">
               {sizes.slice(0, 6).map((size) => (
                 <button
@@ -154,7 +156,7 @@ export function ProductCard({ product, priority = false }: Props) {
           href={`/products/${product.slug}`}
           className="mt-auto block w-full text-center bg-gradient-to-r from-[#6BAED6] to-[#5A9EC6] text-white text-xs md:text-sm font-bold py-2.5 rounded-xl hover:from-[#5A9EC6] hover:to-[#4A8FBA] transition-all shadow-sm shadow-[#6BAED6]/30"
         >
-          Voir le produit →
+          {t.product.viewProduct}
         </Link>
       </div>
     </div>

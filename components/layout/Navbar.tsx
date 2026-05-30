@@ -6,35 +6,32 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { ShoppingBag, Search, Menu, X } from 'lucide-react'
 import { useState, useEffect, useRef, Suspense } from 'react'
 import { useCartStore, selectItemCount } from '@/lib/store/cart'
+import { useT } from '@/lib/i18n/context'
+import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { cn } from '@/lib/utils'
-
-type NavLink = { href: string; label: string; promo?: boolean }
-
-const SHOP_LINKS: NavLink[] = [
-  { href: '/shop?category=fille',       label: 'Fille' },
-  { href: '/shop?category=garcon',      label: 'Garçon' },
-  { href: '/shop?category=pyjamas',     label: 'Pyjamas' },
-  { href: '/shop?category=ensembles',   label: 'Ensembles' },
-  { href: '/shop?category=accessoires', label: 'Accessoires' },
-  { href: '/promotions',                 label: 'Promotions', promo: true },
-]
-
-const DRAWER_LINKS: NavLink[] = [
-  ...SHOP_LINKS,
-  { href: '/about',   label: 'À propos' },
-  { href: '/contact', label: 'Contact' },
-]
 
 function NavbarInner() {
   const pathname     = usePathname()
   const searchParams = useSearchParams()
   const router   = useRouter()
+  const { t } = useT()
   const [open, setOpen]               = useState(false)
   const [scrolled, setScrolled]       = useState(false)
   const [searchOpen, setSearchOpen]   = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
   const itemCount = useCartStore(selectItemCount)
+
+  const SHOP_LINKS = [
+    { href: '/shop?category=fille',       label: t.nav.fille },
+    { href: '/shop?category=garcon',      label: t.nav.garcon },
+    { href: '/shop?category=pyjamas',     label: t.nav.pyjamas },
+    { href: '/shop?category=ensembles',   label: t.nav.ensembles },
+    { href: '/shop?category=accessoires', label: t.nav.accessoires },
+    { href: '/promotions',                label: t.nav.promotions, promo: true },
+  ]
+
+  const DRAWER_LINKS = [...SHOP_LINKS]
 
   const currentHref = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
 
@@ -69,10 +66,10 @@ function NavbarInner() {
 
   return (
     <>
-      {/* ── Announcement bar — gradient logo ─────────────────── */}
-      <div className="bg-gradient-to-r from-[#6BAED6] via-[#9BBFE8] to-[#EF8DB2] text-white text-center py-2 px-4 text-xs font-semibold tracking-wide">
-        🚚 Livraison partout au Maroc &nbsp;·&nbsp; 💳 Paiement à la livraison &nbsp;·&nbsp; 🔄 Retour sous 7 jours
-      </div>
+      {/* ── Announcement bar ─────────────────── */}
+      <div className="bg-gradient-to-r from-[#6BAED6] via-[#9BBFE8] to-[#EF8DB2] text-white text-center py-2 px-4 text-xs font-semibold tracking-wide"
+        dangerouslySetInnerHTML={{ __html: t.nav.announcement }}
+      />
 
       {/* ── Main header ───────────────────────────────────────── */}
       <header className={cn(
@@ -119,10 +116,11 @@ function NavbarInner() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 shrink-0">
+            <LanguageSwitcher />
             <button
               onClick={() => setSearchOpen(true)}
               className="p-2 text-[#6B6B6B] hover:text-[#1A1A1A] transition-colors"
-              aria-label="Rechercher"
+              aria-label={t.nav.search}
             >
               <Search size={20} />
             </button>
@@ -133,7 +131,7 @@ function NavbarInner() {
               aria-label="Panier"
             >
               <ShoppingBag size={16} />
-              <span className="hidden sm:inline">Panier</span>
+              <span className="hidden sm:inline">{t.nav.cart}</span>
               {itemCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-black min-w-[18px] h-[18px] rounded-full flex items-center justify-center leading-none px-0.5 shadow-sm">
                   {itemCount > 9 ? '9+' : itemCount}
@@ -181,7 +179,7 @@ function NavbarInner() {
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher un produit…"
+                placeholder={t.nav.search}
                 className="w-full text-sm text-[#1A1A1A] placeholder:text-[#A8A8A8] bg-transparent outline-none"
               />
             </form>

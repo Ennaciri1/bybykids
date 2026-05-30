@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
+import { getLocale } from '@/lib/i18n/server'
 import './globals.css'
 
 const nunito = Nunito({
@@ -22,9 +23,10 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale()
   return (
-    <html lang="fr" className={`h-full ${nunito.variable}`} suppressHydrationWarning>
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} className={`h-full ${nunito.variable}`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col antialiased bg-[#FAFAF8] text-[#1A1A1A]" suppressHydrationWarning>
         {children}
       </body>

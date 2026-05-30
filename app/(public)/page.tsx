@@ -5,6 +5,7 @@ import { ProductCard } from '@/components/product/ProductCard'
 import { getNewArrivals, getFeaturedProducts } from '@/lib/data/db'
 import { createClient } from '@/lib/supabase/server'
 import { CategoryIcon } from '@/components/ui/CategoryIcon'
+import { getT } from '@/lib/i18n/server'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -12,23 +13,25 @@ export const metadata: Metadata = {
   description: 'Boutique de vêtements bébé et enfant au Maroc. Des pièces douces pour tous les jours. Livraison partout au Maroc. Paiement à la livraison.',
 }
 
-const CATEGORY_TILES = [
-  { slug: 'fille',       label: 'Fille',        sub: '2–12 ans',       bg: '#FDDDE9', accent: '#C0527A' },
-  { slug: 'garcon',      label: 'Garçon',       sub: '2–12 ans',       bg: '#CEEAF8', accent: '#2A7BAD' },
-  { slug: 'pyjamas',     label: 'Pyjamas',      sub: 'Toutes tailles', bg: '#FFF3D6', accent: '#8A6000' },
-  { slug: 'ensembles',   label: 'Ensembles',    sub: 'Bébé & enfant',  bg: '#D4F0E4', accent: '#2A8A5A' },
-  { slug: 'accessoires', label: 'Accessoires',  sub: 'Bonnets, sacs…', bg: '#E8D8F8', accent: '#6A3A9A' },
-]
-
-const TRUST_ITEMS = [
-  { Icon: Truck,       label: 'Livraison partout au Maroc', sub: '2 à 4 jours ouvrés',       bg: '#DEEEF8', color: '#2A7BAD' },
-  { Icon: Banknote,    label: 'Paiement à la livraison',    sub: 'Vous payez à la réception', bg: '#FDDDE9', color: '#B83870' },
-  { Icon: RefreshCw,   label: 'Échange sous 7 jours',       sub: 'Retour facile garanti',     bg: '#D4F0E4', color: '#2A8A5A' },
-  { Icon: ShieldCheck, label: 'Qualité garantie',           sub: 'Matières douces & sûres',   bg: '#FFF3D6', color: '#8A6000' },
-]
-
 export default async function HomePage() {
   const supabase = await createClient()
+  const { t } = await getT()
+
+  const CATEGORY_TILES = [
+    { slug: 'fille',       label: t.categories.fille,       sub: t.categories.filleSub,       bg: '#FDDDE9', accent: '#C0527A' },
+    { slug: 'garcon',      label: t.categories.garcon,      sub: t.categories.garconSub,      bg: '#CEEAF8', accent: '#2A7BAD' },
+    { slug: 'pyjamas',     label: t.categories.pyjamas,     sub: t.categories.pyjamasSub,     bg: '#FFF3D6', accent: '#8A6000' },
+    { slug: 'ensembles',   label: t.categories.ensembles,   sub: t.categories.ensemblesSub,   bg: '#D4F0E4', accent: '#2A8A5A' },
+    { slug: 'accessoires', label: t.categories.accessoires, sub: t.categories.accessoiresSub, bg: '#E8D8F8', accent: '#6A3A9A' },
+  ]
+
+  const TRUST_ITEMS = [
+    { Icon: Truck,       label: t.trust.delivery,  sub: t.trust.deliverySub,  bg: '#DEEEF8', color: '#2A7BAD' },
+    { Icon: Banknote,    label: t.trust.cod,       sub: t.trust.codSub,       bg: '#FDDDE9', color: '#B83870' },
+    { Icon: RefreshCw,   label: t.trust.exchange,  sub: t.trust.exchangeSub,  bg: '#D4F0E4', color: '#2A8A5A' },
+    { Icon: ShieldCheck, label: t.trust.quality,   sub: t.trust.qualitySub,   bg: '#FFF3D6', color: '#8A6000' },
+  ]
+
   const [newArrivals, bestSellers, { data: settings }] = await Promise.all([
     getNewArrivals(8),
     getFeaturedProducts(8),
@@ -120,7 +123,7 @@ export default async function HomePage() {
                     <p className="text-white/70 text-xs mt-1">{hero.badge}</p>
                   </div>
                   <Link href="/shop" className="shrink-0 bg-white text-[#1C1C1E] text-xs font-bold px-4 py-2 rounded-xl hover:bg-[#EAF5FC] hover:text-[#6BAED6] transition-colors">
-                    Voir tout →
+                    {t.home.heroBtn}
                   </Link>
                 </div>
               </>
@@ -139,11 +142,10 @@ export default async function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
                     <div>
-                      <p className="text-white text-base md:text-lg font-extrabold drop-shadow">Nouvelle collection</p>
-                      <p className="text-white/70 text-xs mt-0.5">Bébé &amp; Enfant</p>
+                      <p className="text-white text-base md:text-lg font-extrabold drop-shadow">{t.home.heroTitle}</p>
                     </div>
                     <span className="shrink-0 bg-white text-[#1C1C1E] text-xs font-bold px-3 py-1.5 rounded-xl">
-                      Voir tout →
+                      {t.home.heroBtn}
                     </span>
                   </div>
                 </Link>
@@ -153,7 +155,7 @@ export default async function HomePage() {
                   <Link href="/shop?category=garcon" className="relative rounded-2xl overflow-hidden group block">
                     <Image
                       src="https://images.unsplash.com/photo-1503944583220-6ad77d8adea8?w=400&q=80&auto=format&fit=crop"
-                      alt="Garçon"
+                      alt={t.home.garcon}
                       fill
                       priority
                       sizes="300px"
@@ -161,14 +163,14 @@ export default async function HomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">Garçon</p>
-                      <p className="text-white/70 text-[10px]">2 – 12 ans</p>
+                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">{t.home.garcon}</p>
+                      <p className="text-white/70 text-[10px]">{t.home.garconAge}</p>
                     </div>
                   </Link>
                   <Link href="/shop?category=fille" className="relative rounded-2xl overflow-hidden group block">
                     <Image
                       src="https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400&q=80&auto=format&fit=crop"
-                      alt="Fille et Garçon"
+                      alt={t.home.fille}
                       fill
                       priority
                       sizes="300px"
@@ -176,8 +178,8 @@ export default async function HomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">Fille &amp; Garçon</p>
-                      <p className="text-white/70 text-[10px]">2 – 12 ans</p>
+                      <p className="text-white text-xs md:text-sm font-extrabold drop-shadow">{t.home.fille}</p>
+                      <p className="text-white/70 text-[10px]">{t.home.filleAge}</p>
                     </div>
                   </Link>
                 </div>
@@ -194,7 +196,7 @@ export default async function HomePage() {
       <section className="bg-white border-b border-[#EBEBEB] py-7 md:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <span className="text-xl font-extrabold text-[#1C1C1E]">Nos catégories</span>
+            <span className="text-xl font-extrabold text-[#1C1C1E]">{t.home.categories}</span>
             <span className="h-px flex-1 bg-gradient-to-r from-[#EBEBEB] to-transparent" />
           </div>
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
@@ -232,14 +234,14 @@ export default async function HomePage() {
                 </div>
                 <div>
                   <h2 className="flex items-center gap-2 text-xl md:text-2xl lg:text-3xl font-extrabold text-[#1C1C1E]">
-                    <Sparkles size={22} className="text-[#6BAED6]" /> Nouveaux arrivages
+                    <Sparkles size={22} className="text-[#6BAED6]" /> {t.home.newArrivals}
                   </h2>
                   <p className="text-xs md:text-sm text-[#A8A8A8] mt-0.5">Les dernières pièces ajoutées</p>
                 </div>
               </div>
               <Link href="/shop"
                 className="text-sm font-bold text-[#6BAED6] hover:text-[#4A8FBA] transition-colors bg-[#EAF5FC] px-4 py-2 rounded-xl hover:bg-[#DEEEF8] whitespace-nowrap">
-                Voir tout →
+                {t.home.viewAll} →
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-5">
@@ -278,7 +280,7 @@ export default async function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-5 text-white">
             <div>
               <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-3 py-1 text-xs font-bold mb-3">
-                <Tag size={11} /> Offres spéciales
+                <Tag size={11} /> {t.home.specialOffers}
               </div>
               <p className="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight">
                 Jusqu&apos;à <span className="text-yellow-300">-30%</span> sur une sélection
@@ -307,14 +309,14 @@ export default async function HomePage() {
                 </div>
                 <div>
                   <h2 className="flex items-center gap-2 text-xl md:text-2xl lg:text-3xl font-extrabold text-[#1C1C1E]">
-                    <Heart size={22} className="fill-[#EF8DB2] text-[#EF8DB2]" /> Meilleures ventes
+                    <Heart size={22} className="fill-[#EF8DB2] text-[#EF8DB2]" /> {t.home.bestSellers}
                   </h2>
                   <p className="text-xs md:text-sm text-[#A8A8A8] mt-0.5">Les pièces les plus appréciées</p>
                 </div>
               </div>
               <Link href="/shop"
                 className="text-sm font-bold text-[#EF8DB2] hover:text-[#C9608A] transition-colors bg-[#FEF0F6] px-4 py-2 rounded-xl hover:bg-[#FDDDE9] whitespace-nowrap">
-                Voir tout →
+                {t.home.viewAll} →
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-5">

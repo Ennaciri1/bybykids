@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ShoppingBag, Check } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart'
+import { useT } from '@/lib/i18n/context'
 import { cn } from '@/lib/utils'
 import type { Product, ProductVariant } from '@/lib/types'
 
@@ -31,6 +32,7 @@ type Props = { product: Product; variants: ProductVariant[] }
 
 export function AddToCartSection({ product, variants }: Props) {
   const addItem = useCartStore((s) => s.addItem)
+  const { t } = useT()
   const router  = useRouter()
   const [selectedSize,  setSelectedSize]  = useState<string | null>(null)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
@@ -79,10 +81,10 @@ export function AddToCartSection({ product, variants }: Props) {
       <div>
         <div className="flex items-center justify-between mb-2.5">
           <span className="text-sm font-bold text-[#1A1A1A]">
-            Taille{selectedSize && <span className="text-[#6BAED6] ml-1">— {selectedSize}</span>}
+            {t.product.size}{selectedSize && <span className="text-[#6BAED6] ml-1">— {selectedSize}</span>}
           </span>
           <Link href="/delivery" className="text-xs text-[#6B6B6B] hover:text-[#6BAED6] underline underline-offset-2 transition-colors">
-            Guide des tailles
+            {t.product.sizeGuide}
           </Link>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -114,12 +116,12 @@ export function AddToCartSection({ product, variants }: Props) {
       {selectedSize && (
         <div>
           <span className="text-sm font-bold text-[#1A1A1A] block mb-2.5">
-            Couleur{selectedColor && <span className="text-[#6BAED6] ml-1">— {selectedColor}</span>}
+            {t.product.color}{selectedColor && <span className="text-[#6BAED6] ml-1">— {selectedColor}</span>}
           </span>
           <div className="flex flex-wrap gap-2">
             {colorsForSize.length === 0 ? (
               <p className="text-xs text-[#A8A8A8] bg-[#F5F5F5] rounded px-3 py-2">
-                Aucune couleur disponible pour cette taille
+                {t.product.noColor}
               </p>
             ) : (
               colorsForSize.map((color) => {
@@ -150,7 +152,7 @@ export function AddToCartSection({ product, variants }: Props) {
       {/* Quantity */}
       {selectedVariant && (
         <div>
-          <span className="text-sm font-bold text-[#1A1A1A] block mb-2.5">Quantité</span>
+          <span className="text-sm font-bold text-[#1A1A1A] block mb-2.5">{t.product.quantity}</span>
           <div className="flex items-center gap-3">
             <div className="flex items-center border border-[#E8E8E8] rounded-lg overflow-hidden">
               <button
@@ -167,7 +169,7 @@ export function AddToCartSection({ product, variants }: Props) {
                 +
               </button>
             </div>
-            <span className="text-xs text-[#A8A8A8]">{maxQty} en stock</span>
+            <span className="text-xs text-[#A8A8A8]">{maxQty} {t.product.inStock}</span>
           </div>
         </div>
       )}
@@ -187,15 +189,15 @@ export function AddToCartSection({ product, variants }: Props) {
           )}
         >
           {added ? (
-            <><Check size={17} /> Ajouté au panier</>
+            <><Check size={17} /> {t.product.added}</>
           ) : (
-            <><ShoppingBag size={17} /> Ajouter au panier</>
+            <><ShoppingBag size={17} /> {t.product.addToCart}</>
           )}
         </button>
 
         {!selectedSize && (
           <p className="text-xs text-center text-[#A8A8A8]">
-            Sélectionnez une taille pour continuer
+            {t.product.selectSize}
           </p>
         )}
       </div>
